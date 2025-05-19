@@ -54,10 +54,11 @@
 
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Axenide/Ax-Shell/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/gabee12/Ax-Shell/main/install.sh | bash
 ```
 
 ### Manual Installation
+## I have removed hypridle in this fork, since i use it on my desktop
 1. Install dependencies:
     - [Fabric](https://github.com/Fabric-Development/fabric)
     - [fabric-cli](https://github.com/Fabric-Development/fabric-cli)
@@ -70,7 +71,6 @@ curl -fsSL https://raw.githubusercontent.com/Axenide/Ax-Shell/main/install.sh | 
     - `gobject-introspection`
     - `gpu-screen-recorder`
     - `grimblast`
-    - `hypridle`
     - `hyprlock`
     - `hyprpicker`
     - `hyprshot`
