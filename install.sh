@@ -14,7 +14,6 @@ PACKAGES=(
   gnome-bluetooth-3.0
   gobject-introspection
   gpu-screen-recorder
-  hypridle
   hyprlock
   hyprpicker
   hyprshot
