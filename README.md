@@ -103,7 +103,7 @@ curl -fsSL https://raw.githubusercontent.com/gabee12/Ax-Shell/main/install.sh | 
 
 2. Download and run Ax-Shell:
     ```bash
-    git clone https://github.com/Axenide/Ax-Shell.git ~/.config/Ax-Shell
+    git clone https://github.com/gabee12/Ax-Shell.git ~/.config/Ax-Shell
     uwsm -- app python ~/.config/Ax-Shell/main.py > /dev/null 2>&1 & disown
     ```
 
