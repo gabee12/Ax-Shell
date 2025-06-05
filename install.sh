@@ -4,14 +4,13 @@ set -e  # Exit immediately if a command fails
 set -u  # Treat unset variables as errors
 set -o pipefail  # Prevent errors in a pipeline from being masked
 
-REPO_URL="https://github.com/Axenide/Ax-Shell.git"
+REPO_URL="https://github.com/gabee12/Ax-Shell.git"
 INSTALL_DIR="$HOME/.config/Ax-Shell"
 PACKAGES=(
   brightnessctl
   cava
   cliphist
   fabric-cli-git
-  gnome-bluetooth-3.0
   gobject-introspection
   gpu-screen-recorder
   hyprlock
@@ -52,17 +51,6 @@ fi
 
 aur_helper="yay"
 
-# Check if paru exists, otherwise use yay
-if command -v paru &>/dev/null; then
-    aur_helper="paru"
-elif ! command -v yay &>/dev/null; then
-    echo "Installing yay-bin..."
-    tmpdir=$(mktemp -d)
-    git clone --depth=1 https://aur.archlinux.org/yay-bin.git "$tmpdir/yay-bin"
-    (cd "$tmpdir/yay-bin" && makepkg -si --noconfirm)
-    rm -rf "$tmpdir"
-fi
-
 # Clone or update the repository
 if [ -d "$INSTALL_DIR" ]; then
     echo "Updating Ax-Shell..."
@@ -78,12 +66,6 @@ $aur_helper -Syy --needed --devel --noconfirm "${PACKAGES[@]}" || true
 
 echo "Installing gray-git..."
 yes | $aur_helper -Syy --needed --devel --noconfirm gray-git || true
-
-# Downgrade python-gobject to 3.50.0-2 (Temporary fix)
-if [ "$(pacman -Q python-gobject | awk '{print $2}')" != "3.50.0-2" ]; then
-    echo "Downgrading python-gobject to 3.50.0-2..."
-    sudo pacman -U --noconfirm https://archive.archlinux.org/packages/p/python-gobject/python-gobject-3.50.0-2-x86_64.pkg.tar.zst
-fi
 
 echo "Installing required fonts..."
 
