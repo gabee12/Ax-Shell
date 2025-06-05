@@ -24,10 +24,12 @@ PACKAGES=(
   nvtop
   playerctl
   python-fabric-git
+  python-gobject
   python-ijson
   python-numpy
   python-pillow
   python-psutil
+  python-pywayland
   python-requests
   python-setproctitle
   python-toml
@@ -36,11 +38,13 @@ PACKAGES=(
   swww
   tesseract
   tmux
+  ttf-nerd-fonts-symbols-mono
   unzip
+  upower
   uwsm
+  vte3
   webp-pixbuf-loader
   wl-clipboard
-  wlinhibit
 )
 
 # Prevent running as root
@@ -92,7 +96,7 @@ fi
 if [ ! -d "$HOME/.fonts/tabler-icons" ]; then
     echo "Copying local fonts to $HOME/.fonts/tabler-icons..."
     mkdir -p "$HOME/.fonts/tabler-icons"
-    cp -r "$INSTALL_DIR/assets/fonts/"* "$HOME/.fonts/tabler-icons"
+    cp -r "$INSTALL_DIR/assets/fonts/"* "$HOME/.fonts"
 else
     echo "Local fonts are already installed. Skipping copy."
 fi
