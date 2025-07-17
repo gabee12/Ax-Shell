@@ -247,7 +247,7 @@ class Dock(Window):
                     corner.set_visible(False)
             
 
-            if not data.DOCK_ENABLED or data.BAR_POSITION == "Bottom":
+            if not data.DOCK_ENABLED or (data.BAR_POSITION in ["Top", "Bottom"] and data.PANEL_THEME != "Notch"):
                 self.set_visible(False) 
             
             if self.always_occluded: 
@@ -698,41 +698,47 @@ class Dock(Window):
             return
 
         def process_drag_end():
-            if not self.integrated_mode and self.get_mapped(): 
-                display = Gdk.Display.get_default()
-                if display:
-                    _, x_ptr, y_ptr, _ = display.get_pointer() 
-                    gdk_window = self.get_window() 
-                    if gdk_window:
-                        win_x, win_y, width, height = gdk_window.get_geometry()
-                        if not (win_x <= x_ptr <= win_x + width and win_y <= y_ptr <= win_y + height):
-                            app_id_dragged = widget.app_identifier 
-                            instances_dragged = widget.instances 
-                            
-                            app_index_dragged = -1 
-                            for i, pinned_app_item in enumerate(self.pinned): 
-                                if isinstance(app_id_dragged, dict) and isinstance(pinned_app_item, dict):
-                                    if app_id_dragged.get("name") == pinned_app_item.get("name"):
-                                        app_index_dragged = i; break
-                                elif app_id_dragged == pinned_app_item:
-                                    app_index_dragged = i; break
-                            
-                            if app_index_dragged >= 0:
-                                self.pinned.pop(app_index_dragged)
-                                self.config["pinned_apps"] = self.pinned
-                                self.update_pinned_apps_file()
-                                self.update_dock()
-                            elif instances_dragged:
-                                address = instances_dragged[0].get("address")
-                                if address:
-                                    exec_shell_command(f"hyprctl dispatch focuswindow address:{address}")
+            display = Gdk.Display.get_default()
+            _, x, y, _ = display.get_pointer()
             
+            # Get the widget's allocation to check if drag ended outside
+            alloc = self.view.get_allocation()
+            widget_x = alloc.x
+            widget_y = alloc.y
+            widget_width = alloc.width
+            widget_height = alloc.height
+            
+            # Check if pointer is outside the dock area
+            if not (widget_x <= x <= widget_x + widget_width and widget_y <= y <= widget_y + widget_height):
+                app_id_dragged = widget.app_identifier
+                instances_dragged = widget.instances
+
+                # Remove pinned app
+                app_index_dragged = -1
+                for i, pinned_app_item in enumerate(self.pinned):
+                    if isinstance(app_id_dragged, dict) and isinstance(pinned_app_item, dict):
+                        if app_id_dragged.get("name") == pinned_app_item.get("name"):
+                            app_index_dragged = i
+                            break
+                    elif app_id_dragged == pinned_app_item:
+                        app_index_dragged = i
+                        break
+                
+                if app_index_dragged >= 0:
+                    self.pinned.pop(app_index_dragged)
+                    self.config["pinned_apps"] = self.pinned
+                    self.update_pinned_apps_file()
+                    self.update_dock()
+                elif instances_dragged:
+                    address = instances_dragged[0].get("address")
+                    if address:
+                        exec_shell_command(f"hyprctl dispatch focuswindow address:{address}")
+
             self._drag_in_progress = False
             if not self.integrated_mode:
                 self.check_occlusion_state()
 
         GLib.idle_add(process_drag_end)
-
     def check_config_change(self):
         new_config = read_config()
         if not self.integrated_mode:

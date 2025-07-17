@@ -40,6 +40,7 @@ BAR_THEME = "Pills"
 DOCK_THEME = "Pills"
 
 PANEL_THEME = "Notch"
+DATETIME_12H_FORMAT = False # Default value if config file doesn't exist
 
 def load_config():
     """Load the configuration from config.json"""
@@ -62,12 +63,14 @@ if os.path.exists(CONFIG_FILE):
     BAR_POSITION = config.get('bar_position', "Top")
     VERTICAL = BAR_POSITION in ["Left", "Right"]
     CENTERED_BAR = config.get('centered_bar', False)
+    DATETIME_12H_FORMAT = config.get('datetime_12h_format', False)
     TERMINAL_COMMAND = config.get('terminal_command', "kitty -e")
     DOCK_ENABLED = config.get('dock_enabled', True)
     DOCK_ALWAYS_OCCLUDED = config.get('dock_always_occluded', False)
     DOCK_ICON_SIZE = config.get('dock_icon_size', 28)
     BAR_WORKSPACE_SHOW_NUMBER = config.get('bar_workspace_show_number', False)
     BAR_WORKSPACE_USE_CHINESE_NUMERALS = config.get('bar_workspace_use_chinese_numerals', False)
+    BAR_HIDE_SPECIAL_WORKSPACE = config.get('bar_hide_special_workspace', True)
     BAR_THEME = config.get('bar_theme', "Pills")
     DOCK_THEME = config.get('dock_theme', "Pills")
     PANEL_THEME = config.get('panel_theme', "Pills")
@@ -100,12 +103,14 @@ else:
     BAR_POSITION = "Top"
     VERTICAL = False
     CENTERED_BAR = False
+    DATETIME_12H_FORMAT = False
     DOCK_ENABLED = True
     DOCK_ALWAYS_OCCLUDED = False
     TERMINAL_COMMAND = "kitty -e"
     DOCK_ICON_SIZE = 28
     BAR_WORKSPACE_SHOW_NUMBER = False
     BAR_WORKSPACE_USE_CHINESE_NUMERALS = False
+    BAR_HIDE_SPECIAL_WORKSPACE = True
     BAR_THEME = "Pills"
     DOCK_THEME = "Pills"
     PANEL_THEME = "Notch"
